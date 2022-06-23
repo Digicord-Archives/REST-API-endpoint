@@ -33,16 +33,31 @@ exports.createDB = () => {
 };
 
 const createUserTable = `
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE IF NOT EXISTS doctors (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(50) NULL,
+    fullname VARCHAR(50) NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
+    phone_number INT NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
+    status BOOLEAN DEFAULT 0,
     created_on TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
 )
 `;
 
-
+const createTodoTable = `
+CREATE TABLE IF NOT EXISTS patients (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    patient_id INT NOT NULL,
+    FOREIGN KEY (patient_id) REFERENCES doctors(id),
+    fullname VARCHAR(50) NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    phone_number INT NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
+    created_on TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
+)
+`;
 
 exports.createTables = () => {
   let connection = mysql.createConnection({
@@ -56,9 +71,15 @@ exports.createTables = () => {
     if (err) {
       return console.log(err);
     }
-    return console.log("User Table Created Successfully");
+    return console.log("Doctor Table Created Successfully");
   });
 
+  connection.query(createTodoTable, (err, _) => {
+    if (err) {
+      return console.log(err);
+    }
+    return console.log("Patient Table Created Successfully");
+  });
 };
 
 this.createDB();
