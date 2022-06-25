@@ -10,14 +10,14 @@ exports.register = (req, res) => {
       });
     }
 
-    const {doctor_id,first_name,last_name,email,password,specialization,phone_number,
+    const {doctor_id,first_name,last_name,email,password,specialization,phone_number,age,
         location,sex,is_available,is_admin} = req.body;
     const salt = bcrypt.genSaltSync(10);
     const hashed = bcrypt.hashSync(password, salt);
     const encrypedPass = hashed;
     const image_url= req.file.filename;
-    const doctor = new Doctors( doctor_id,first_name,last_name, email, encrypedPass,
-        specialization,phone_number,
+    const doctor = new Doctors( doctor_id,first_name,last_name,email,encrypedPass,
+        specialization,phone_number,age,
         location,sex,image_url,is_available,is_admin);
         
     //nodemailer config    

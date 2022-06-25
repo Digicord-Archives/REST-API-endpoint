@@ -2,7 +2,7 @@ const db = require('../utils/database');
 
 class Doctors {
     constructor(doctor_id,first_name,last_name,email,password,specialization,
-        phone_number,location,sex,image_url,is_available,is_admin) {
+        phone_number,age,location,sex,image_url,is_available,is_admin) {
        this.doctor_id = doctor_id;
        this.first_name = first_name;
        this.last_name = last_name;
@@ -10,6 +10,7 @@ class Doctors {
        this.password = password;
        this.specialization = specialization;
        this.phone_number = phone_number;
+       this.age = age;
        this.location = location;
        this.sex = sex;
        this.image_url = image_url;
@@ -19,9 +20,9 @@ class Doctors {
     }
     static create(newUser, result) {
         db.query(
-          "INSERT INTO users VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,NOW())",
-          [newUser.doctor_id,newUser.first_name,newUser.email,newUser.password,newUser.specialization,
-            newUser.phone_number,newUser.location,newUser.sex,newUser.image_url,newUser.is_available,
+          "INSERT INTO doctors VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())",
+          [newUser.doctor_id,newUser.first_name,newUser.last_name,newUser.email,newUser.password,newUser.specialization,
+            newUser.phone_number,newUser.age,newUser.location,newUser.sex,newUser.image_url,newUser.is_available,
             newUser.is_admin],
           (err, res) => {
             if (err) {
