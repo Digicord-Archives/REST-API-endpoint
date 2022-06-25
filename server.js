@@ -1,69 +1,43 @@
-const express = require('express');
-const bodyparser = require('body-parser')
-const validation = require('express-validator')
+const express = require("express");
 const cors = require("cors");
-const db = require('./server/utils/database');
+const bodyParser = require('body-parser')
+const doctorsRouter = require('./Server/routes/doctors')
+
+
 const app = express();
-const Patient = require('./server/models/patient.model')
-const patientRoutes = require('./server/routes/authPatient.route')
 
-app.use((req,res,next)=>{
-  res.setHeader('Access-Control-Allow-Origin','*')
-  res.setHeader('Access-Control-Allow-Methods','OPTIONS,GET,POST,PUT,PATCH,DELETE')
-  res.setHeader('Access-Control-Allow-Headers','Content-Type,Authorization');
-  next()
-}) 
- 
- // db.execute("SELECT * FROM doctors")
-//   .then(result =>{
-//     console.log(result[0])
-//   })
-//   .catch(err =>{
-//     console.log(err)
-//   })
+app.use(express.static('public'));
+app.use(express.static('images'));
+app.use(express.json());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: false }));
 
-app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({ extended: false }));
 app.use(cors());
 
-app.use('/auth/api',patientRoutes)
-
-app.use((error,req,res,next)=>{
-  console.log(error);
-  const status = error.statusCode || 500;
-  const message = error.message;
-  const data = error.data;
-  res.status(status).json({message:message,data:data})
-})
-
-// app.get("/", (req, res) => {
-//   res.status(200).send({
-//     status: "success",
-//     data: {
-//       message: "Todo API of the SideHustle Portfolio Bootcamp",
-//     },
-//   });
-// });
 
 
+app.get("/", (req, res) => {
+  res.status(200).send({
+    status: "success",
+    data: {
+      message: "welcome to Digicord Backend",
+    },
+  });
+});
 
-// // Handle when an invalid route is hitted
-// app.all("*", (req, res) => {
-//   res.send({
-//     status: false,
-//     messsage: "Oops! you've hitted an invalid route.",
-//   });
-// });
+app.use("/api/v1/doctors", doctorsRouter);
+
+
+// Handle when an invalid route is hitted
+app.all("*", (req, res) => {
+  res.send({
+    status: false,
+    messsage: "Oops! you've hitted an invalid route.",
+  });
+});
 
 const PORT = process.env.PORT || 8000;
 
-
-db.execute('SELECT * FROM doctors')
-.then(result =>{
-  console.log(result)
-  app.listen(PORT,()=>{
-    console.log(`Server is running ${PORT}`)
-  })
-})
-.catch(err =>{console.log(err)
-})
+app.listen(PORT, () => {
+  console.log(`Running on PORT ${PORT}`);
+});
