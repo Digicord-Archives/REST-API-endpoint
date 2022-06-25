@@ -34,13 +34,13 @@ exports.createDB = () => {
 const createUserTable = `
 CREATE TABLE IF NOT EXISTS doctors (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  doctor_id INT NOT NULL,
+  doctor_id VARCHAR(250) NOT NULL,
   first_name VARCHAR(250) NOT NULL,
   last_name VARCHAR(250) NOT NULL,
   email VARCHAR(250) NOT NULL UNIQUE,
   password VARCHAR(250) NOT NULL,
   specialization VARCHAR(250) NOT NULL,
-  phone_number INT NOT NULL,
+  phone_number VARCHAR(250) NOT NULL,
   age VARCHAR(250) NOT NULL,
   location VARCHAR(250) NOT NULL,
   sex TINYINT NOT NULL DEFAULT 0 ,
@@ -54,20 +54,21 @@ CREATE TABLE IF NOT EXISTS doctors (
 const createTodoTable = `
 CREATE TABLE IF NOT EXISTS patients (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  patient_id INT NOT NULL,
+  patient_id VARCHAR(250) NOT NULL,
+  user_id INT NULL,
   first_name VARCHAR(250) NOT NULL,
   last_name VARCHAR(250) NOT NULL,
   email VARCHAR(250) NOT NULL UNIQUE,
   password VARCHAR(250) NOT NULL,
-  phone_number INT NOT NULL,
-  age  INT  NOT NULL,
+  phone_number VARCHAR(250) NOT NULL,
+  age  VARCHAR(200)  NOT NULL,
   location VARCHAR(250) NOT NULL,
   sex TINYINT NOT NULL DEFAULT 0 ,
   image_url VARCHAR(250) NOT NULL,
   is_available BOOLEAN DEFAULT 0,
   is_admin BOOLEAN DEFAULT 0,
   created_on TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-  FOREIGN KEY (patient_id) REFERENCES doctors(id)
+  FOREIGN KEY (user_id) REFERENCES doctors(id)
 )
 `;
 exports.createTables = () => {

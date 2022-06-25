@@ -1,7 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require('body-parser')
-const doctorsRouter = require('./Server/routes/doctors')
+const doctorsRouter = require('./Server/routes/doctors');
+const patientRouter= require('./Server/routes/patients');
 
 
 const app = express();
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/doctors", doctorsRouter);
+app.use("/api/v1/patients", patientRouter);
 
 
 // Handle when an invalid route is hitted

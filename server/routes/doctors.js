@@ -3,6 +3,13 @@ const router = express.Router();
 const doctorController = require('../controllers/doctors');
 const open = require('../multer');
 
-router.post('/',open.upload, doctorController.register);
+//..........POST DOCTORS ROUTES.....................................................
+router.post('/signup',open.upload, doctorController.register);
+
+//..........GET ALL DOCTORS ROUTES.....................................................
+router.get('/',doctorController.getDoctors);
+
+//..........SIGN IN DOCTORS ROUTES.....................................................
+router.post('/signin',doctorController.login);
 
 module.exports = router;
