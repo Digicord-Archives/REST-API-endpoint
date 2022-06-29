@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const patientController= require('../controllers/patients')
-const open = require('../multer');
+const upload = require('../multer');
 
 //..........REGISTER PATIENTS ROUTES.....................................................
-router.post('/signup',open.upload, patientController.register);
+router.post('/signup',upload.single("image_url"), patientController.register);
 
 //..........GET ALL PATIENTS ROUTES.....................................................
 router.get('/',patientController.getPatients);

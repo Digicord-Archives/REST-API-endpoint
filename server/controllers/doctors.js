@@ -2,9 +2,10 @@ const Doctors = require('../models/doctors')
 const bcrypt = require("bcryptjs");
 const jwt= require('jsonwebtoken')
 const transporter=require('../nodemailer');
+const cloudinary = require('../config/cloudinaryconfig');
 
     //..........REGISTER DOCTORS  CONTROL.....................................................
-exports.register = (req, res) => {
+exports.register = async (req, res) => {
     if (!req.body) {
       res.status(400).send({
         message: "Content can not be empty!",
@@ -12,11 +13,16 @@ exports.register = (req, res) => {
     }
 
     const {doctor_id,first_name,last_name,email,password,specialization,phone_number,age,
-        location,sex,is_available,is_admin} = req.body;
+    location,sex,is_available,is_admin} = req.body;
+    const filstring = req.file.path || req.body.data;
+    const result = await cloudinary.uploader.upload(filstring,{
+          upload_preset:"unsigned"
+        });
+    console.log(result);
     const salt = bcrypt.genSaltSync(10);
     const hashed = bcrypt.hashSync(password, salt);
     const encrypedPass = hashed;
-    const image_url= req.file.filename;
+    const image_url= result.url;
     const doctor = new Doctors( doctor_id,first_name,last_name,email,encrypedPass,
         specialization,phone_number,age,
         location,sex,image_url,is_available,is_admin);
