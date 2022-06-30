@@ -2,21 +2,20 @@ const db = require('../utils/database');
 
 //..........PATIENT COSTRUCTOR MODEL.....................................................
 class Patient {
-    constructor(patient_id,user_id,first_name,last_name,email,password,
-        phone_number,age,location,sex,image_url,is_available,is_admin) {
-       this.patient_id = patient_id;
-       this.user_id = user_id;
-       this.first_name = first_name;
-       this.last_name = last_name;
-       this.email = email;
-       this.password = password;
-       this.phone_number = phone_number;
-       this.age = age;
-       this.location = location;
-       this.sex = sex;
-       this.image_url = image_url;
-       this.is_available = is_available;
-       this.is_admin = is_admin;
+    constructor(params) {
+       this.patient_id = params.patient_id;
+       this.user_id = params.user_id;
+       this.first_name = params.first_name;
+       this.last_name = params.last_name;
+       this.email = params.email;
+       this.password = params.password;
+       this.phone_number = params.phone_number;
+       this.age = params.age;
+       this.location = params.location;
+       this.sex =params.sex;
+       this.image_url = params.image_url;
+       this.is_available = params.is_available;
+       this.is_admin =params.is_admin;
     
     }
 
