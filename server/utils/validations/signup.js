@@ -9,7 +9,7 @@ module.exports = [
     check('age').isNumeric().withMessage('age requireds a numeric value'),
     check('sex').isLength({ min: 0, max: 1}).withMessage('sex must be 0 or 1'),
     check('location').isString(),
-    check('location').isLength({ max: 30 }).withMessage('location field must be less then 30 characters'),
+    check('location').isLength({ max: 100 }).withMessage('location field must be less then 30 characters'),
     check('email').isEmail().withMessage('invalid email format'),
     check('password').isLength({ min: 5 }).withMessage('password field must be more than 5 and less than 16 characters'),
     check('confirm_password').isLength({ min: 5 }).withMessage('confirm password field must be more than 5 and less than 16 characters')
