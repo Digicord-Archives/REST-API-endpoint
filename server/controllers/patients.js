@@ -3,6 +3,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
 const transporter=require('../nodemailer');
 const cloudinary = require('cloudinary');
+const { validationResult } = require('express-validator');
+const db = require('../utils/database');
 
  //..........REGISTER PATIENTS  CONTROL.....................................................
 exports.register = async (req, res) => {
@@ -131,3 +133,58 @@ exports.getPatients = (req, res) => {
       }
     });
   };
+
+   // .............New Logic............................................
+exports.patientsRegister = async (req, res) => {
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    return res.status(400).json({
+      status: false,
+      body: errors.array()
+    })
+  }
+
+  const {
+    first_name, last_name, email, phone_number, age, sex, location, password, confirm_password
+  } = req.body;
+
+  if(password !== confirm_password){
+    return res.status(400).json({
+      status: false,
+      body: 'passwords do not match'
+    })
+  }
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    // store in database
+    const queryStatement = `INSERT INTO patients (first_name, last_name, email, phone_number, age, sex, location, password) VALUES (?,?,?,?,?,?,?,?)`;
+    const result = await db.execute(queryStatement, [first_name, last_name, email, phone_number, age, sex, location, hashedPassword]);
+    
+    // generate token
+    const token = jwt.sign({ id: result[0].insertId }, process.env.JWT_SECRET)
+    return res.status(201).json({
+      status: true,
+      body: {
+        first_name, last_name, email, phone_number, age, sex, location, token,
+        userId: result[0].insertId
+      }
+    });
+
+  } catch (error) {
+    
+    if(error.code == 'ER_DUP_ENTRY'){
+      return res.status(400).json({
+        status: false,
+        body: 'user already exists, please login'
+      })
+    }
+
+    return res.status(400).json({
+      status: false,
+      body: error.message
+    })
+  }
+}
+
+  
